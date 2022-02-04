@@ -1,6 +1,7 @@
+import { getAllByAltText } from "@testing-library/react";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { getEvents } from "./EventManager";
+import { DeleteEvent, getEvents } from "./EventManager";
 
 
 export const EventList = (props) => {
@@ -8,9 +9,19 @@ export const EventList = (props) => {
     const history = useHistory()
 
     useEffect(()=>{
-        getEvents().then(res => setevents(res))
+        GetAll()
     }, [])
+    
 
+    const deleteEvent = (id) => {
+        DeleteEvent(parseInt(id))
+        .then(GetAll)
+    }
+
+    const GetAll = () => {
+        getEvents().then(res => setevents(res))
+    }
+    
     return <>
             <button className="btn btn-2 btn-sep icon-create"
             onClick={() => {
@@ -27,6 +38,8 @@ export const EventList = (props) => {
                         <div>Will be played on: {event.date}</div>
                         <div>@ {event.time}</div>
                         <div>Hosted by: {event.organizer.bio}</div>
+                        <button onClick={()=>history.push(`./events/update/${event.id}`)}>Update Event</button>
+                        <button onClick={()=>{deleteEvent(event.id)}}>Delete Event</button>
                         <div></div>
                     </div>
                 })
