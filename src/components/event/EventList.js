@@ -1,8 +1,6 @@
-import { getAllByAltText } from "@testing-library/react";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { DeleteEvent, getEvents } from "./EventManager";
-
+import { DeleteEvent, getEvents, leaveEvent, joinEvent } from "./EventManager";
 
 export const EventList = (props) => {
     const [events, setevents] = useState([])
@@ -40,6 +38,13 @@ export const EventList = (props) => {
                         <div>Hosted by: {event.organizer.bio}</div>
                         <button onClick={()=>history.push(`./events/update/${event.id}`)}>Update Event</button>
                         <button onClick={()=>{deleteEvent(event.id)}}>Delete Event</button>
+                        <div>
+                        {
+                            event.joined ? <button onClick={()=>{leaveEvent(event.id).then(GetAll)}}> Leave Event </button>: <button onClick={()=>{
+                                joinEvent(event.id).then(GetAll)
+                            }}>Join Event</button> 
+                        }
+                        </div>
                         <div></div>
                     </div>
                 })
